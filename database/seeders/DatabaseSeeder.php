@@ -9,7 +9,7 @@ class DatabaseSeeder extends Seeder {
    * seed the application's database
    */
   public function run(): void {
-    $this->call([
+    $this -> call([
       TareaSeeder::class,
       EtiquetaSeeder::class
     ]);
