@@ -17,4 +17,8 @@ class Tarea extends Model {
     'updated_at'
   ];
   protected $table = 'tareas';
+
+  public function etiquetas() {
+    return $this -> belongsToMany(Etiqueta::class, 'tarea_etiqueta', 'tarea_id', 'etiqueta_id');
+  }
 }
