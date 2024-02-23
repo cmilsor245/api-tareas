@@ -3,14 +3,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Etiqueta;
 use App\Http\Requests\EtiquetaRequest;
+use App\Http\Resources\EtiquetaResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class EtiquetaController extends Controller {
   /**
    * display a listing of the resource
    */
-  public function index() {
+  public function index(): JsonResource {
     $etiquetas = Etiqueta::all();
-    return $etiquetas;
+    return EtiquetaResource::collection($etiquetas);
   }
 
   /**
@@ -23,16 +25,16 @@ class EtiquetaController extends Controller {
   /**
    * store a newly created resource in storage
    */
-  public function store(EtiquetaRequest $request) {
+  public function store(EtiquetaRequest $request): JsonResource {
     $etiqueta = Etiqueta::create($request -> all());
-    return $etiqueta;
+    return new EtiquetaResource($etiqueta);
   }
 
   /**
    * display the specified resource
    */
-  public function show(Etiqueta $etiqueta) {
-    return $etiqueta;
+  public function show(Etiqueta $etiqueta): JsonResource {
+    return new EtiquetaResource($etiqueta);
   }
 
   /**
@@ -45,9 +47,9 @@ class EtiquetaController extends Controller {
   /**
    * update the specified resource in storage
    */
-  public function update(EtiquetaRequest $request, Etiqueta $etiqueta) {
+  public function update(EtiquetaRequest $request, Etiqueta $etiqueta): JsonResource {
     $etiqueta -> update($request -> all());
-    return $etiqueta;
+    return new EtiquetaResource($etiqueta);
   }
 
   /**
