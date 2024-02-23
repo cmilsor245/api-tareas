@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tarea;
-use Illuminate\Http\Request;
+use App\Http\Requests\TareaRequest;
 
 class TareaController extends Controller {
   /**
@@ -23,10 +23,8 @@ class TareaController extends Controller {
   /**
    * store a newly created resource in storage
    */
-  public function store(Request $request) {
-    $tarea = new Tarea();
-    $tarea -> fill($request -> all());
-    $tarea -> save();
+  public function store(TareaRequest $request) {
+    $tarea = Tarea::create($request -> all());
     return $tarea;
   }
 
@@ -47,9 +45,8 @@ class TareaController extends Controller {
   /**
    * update the specified resource in storage
    */
-  public function update(Request $request, Tarea $tarea) {
-    $tarea -> fill($request -> all());
-    $tarea -> save();
+  public function update(TareaRequest $request, Tarea $tarea) {
+    $tarea -> update($request -> all());
     return $tarea;
   }
 
