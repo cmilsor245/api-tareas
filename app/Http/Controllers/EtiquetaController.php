@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Etiqueta;
-use Illuminate\Http\Request;
+use App\Http\Requests\EtiquetaRequest;
 
 class EtiquetaController extends Controller {
   /**
@@ -23,10 +23,8 @@ class EtiquetaController extends Controller {
   /**
    * store a newly created resource in storage
    */
-  public function store(Request $request) {
-    $etiqueta = new Etiqueta();
-    $etiqueta -> fill($request -> all());
-    $etiqueta -> save();
+  public function store(EtiquetaRequest $request) {
+    $etiqueta = Etiqueta::create($request -> all());
     return $etiqueta;
   }
 
@@ -47,9 +45,8 @@ class EtiquetaController extends Controller {
   /**
    * update the specified resource in storage
    */
-  public function update(Request $request, Etiqueta $etiqueta) {
-    $etiqueta -> fill($request -> all());
-    $etiqueta -> save();
+  public function update(EtiquetaRequest $request, Etiqueta $etiqueta) {
+    $etiqueta -> update($request -> all());
     return $etiqueta;
   }
 
