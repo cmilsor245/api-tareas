@@ -15,7 +15,8 @@ class TareaResource extends JsonResource {
       'id' => $this -> id,
       'titulo' => $this -> titulo,
       'descripcion' => $this -> descripcion,
-      'info-completa' => $this -> titulo . ' - ' . $this -> descripcion
+      'info-completa' => $this -> titulo . ' - ' . $this -> descripcion,
+      'etiquetas' => $this -> etiquetas -> pluck('nombre')
     ];
   }
 }

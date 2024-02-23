@@ -26,14 +26,19 @@ class TareaController extends Controller {
    * store a newly created resource in storage
    */
   public function store(TareaRequest $request): JsonResource {
-    $tarea = Tarea::create($request -> all());
+    $tarea = new Tarea();
+    $tarea -> titulo = $request -> titulo;
+    $tarea -> descripcion = $request -> descripcion;
+    $tarea -> save();
+    $tarea -> etiquetas() -> attach($request -> etiquetas);
     return new TareaResource($tarea);
   }
 
   /**
    * display the specified resource
    */
-  public function show(Tarea $tarea): JsonResource {
+  public function show($id): JsonResource {
+    $tarea = Tarea::find($id);
     return new TareaResource($tarea);
   }
 
@@ -47,16 +52,26 @@ class TareaController extends Controller {
   /**
    * update the specified resource in storage
    */
-  public function update(TareaRequest $request, Tarea $tarea): JsonResource {
-    $tarea -> update($request -> all());
+  public function update(TareaRequest $request, $id): JsonResource {
+    $tarea = Tarea::find($id);
+    $tarea -> titulo = $request -> titulo;
+    $tarea -> descripcion = $request -> descripcion;
+    $tarea -> etiquetas() -> detach();
+    $tarea -> etiquetas() -> attach($request -> etiquetas);
+    $tarea -> save();
     return new TareaResource($tarea);
   }
 
   /**
    * remove the specified resource from storage
    */
-  public function destroy(Tarea $tarea) {
-    $tarea -> delete();
-    return $tarea;
+  public function destroy($id) {
+    $tarea = Tarea::find($id);
+    if ($tarea) {
+      $tarea -> delete();
+      return response() -> json(["message" => "tarea eliminada"], 204);
+    } else {
+      return response() -> json(["message" => "tarea no encontrada"], 404);
+    }
   }
 }
