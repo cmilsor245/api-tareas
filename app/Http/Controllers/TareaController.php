@@ -3,14 +3,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Tarea;
 use App\Http\Requests\TareaRequest;
+use App\Http\Resources\TareaResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class TareaController extends Controller {
   /**
    * display a listing of the resource
    */
-  public function index() {
+  public function index(): JsonResource {
     $tareas = Tarea::all();
-    return $tareas;
+    return TareaResource::collection($tareas);
   }
 
   /**
@@ -23,16 +25,16 @@ class TareaController extends Controller {
   /**
    * store a newly created resource in storage
    */
-  public function store(TareaRequest $request) {
+  public function store(TareaRequest $request): JsonResource {
     $tarea = Tarea::create($request -> all());
-    return $tarea;
+    return new TareaResource($tarea);
   }
 
   /**
    * display the specified resource
    */
-  public function show(Tarea $tarea) {
-    return $tarea;
+  public function show(Tarea $tarea): JsonResource {
+    return new TareaResource($tarea);
   }
 
   /**
@@ -45,9 +47,9 @@ class TareaController extends Controller {
   /**
    * update the specified resource in storage
    */
-  public function update(TareaRequest $request, Tarea $tarea) {
+  public function update(TareaRequest $request, Tarea $tarea): JsonResource {
     $tarea -> update($request -> all());
-    return $tarea;
+    return new TareaResource($tarea);
   }
 
   /**
