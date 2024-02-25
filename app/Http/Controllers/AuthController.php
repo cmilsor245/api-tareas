@@ -18,27 +18,31 @@ class AuthController extends Controller {
 
     return response() -> json([
       'data' => $usuario,
-      'access_token' => $token,
+      'token_de_acceso' => $token,
       'token_type' => 'Bearer'
     ]);
   }
 
   public function login(Request $request) {
-    $usuario = User::where('email', $request -> email) -> firstOrFail();
+    $usuario = User::where('email', $request -> email) -> first();
 
     if (!$usuario || !Hash::check($request -> password, $usuario -> password)) {
       return response() -> json([
-        'message' => 'credenciales incorrectas'
+        'message' => 'Credenciales incorrectas'
       ], 401);
-
-      $token = $usuario -> createToken('authToken') -> plainTextToken;
-
-      return response() -> json([
-        'message' =>
-          'hola ' . $usuario -> name,
-          'access_token' => $token,
-          'token_type' => 'Bearer'
-      ]);
     }
+
+    $token = $usuario -> createToken('authToken') -> plainTextToken;
+
+    return response() -> json([
+      'message' => '¡hola ' . $usuario -> name . '!',
+      'token_de_acceso' => $token,
+      'token_type' => 'Bearer'
+    ]);
+  }
+
+  public function logout() {
+    auth() -> user() -> tokens() -> delete();
+    return response() -> json(['message' => 'sesión cerrada correctamente']);
   }
 }
