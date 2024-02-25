@@ -5,6 +5,7 @@ use App\Models\Tarea;
 use App\Http\Requests\TareaRequest;
 use App\Http\Resources\TareaResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Etiqueta;
 
 class TareaController extends Controller {
   /**
@@ -26,6 +27,12 @@ class TareaController extends Controller {
    * store a newly created resource in storage
    */
   public function store(TareaRequest $request): JsonResource {
+    $etiquetas_existentes = Etiqueta::whereIn('id', $request -> etiquetas) -> pluck('id');
+    $etiquetas_inexistentes = collect($request -> etiquetas) -> diff($etiquetas_existentes -> all());
+    if ($etiquetas_inexistentes -> count() > 0) {
+      return new JsonResource(['message' => 'las siguientes etiquetas no existen: ' . $etiquetas_inexistentes -> implode(', ')], 404);
+    }
+
     $tarea = new Tarea();
     $tarea -> titulo = $request -> titulo;
     $tarea -> descripcion = $request -> descripcion;
@@ -40,7 +47,7 @@ class TareaController extends Controller {
   public function show($id) {
     $tarea = Tarea::find($id);
     if (!$tarea) {
-      return response() -> json(["message" => "tarea no encontrada"], 404);
+      return response() -> json(['message' => 'tarea no encontrada'], 404);
     }
     return new TareaResource($tarea);
   }
@@ -58,8 +65,15 @@ class TareaController extends Controller {
   public function update(TareaRequest $request, $id): JsonResource {
     $tarea = Tarea::find($id);
     if (!$tarea) {
-      return response() -> json(["message" => "tarea no encontrada"], 404);
+      return new JsonResource(['message' => 'tarea no encontrada'], 404);
     }
+
+    $etiquetas_existentes = Etiqueta::whereIn('id', $request -> etiquetas) -> pluck('id');
+    $etiquetas_inexistentes = collect($request -> etiquetas) -> diff($etiquetas_existentes -> all());
+    if ($etiquetas_inexistentes -> count() > 0) {
+      return new JsonResource(['message' => 'las siguientes etiquetas no existen: ' . $etiquetas_inexistentes -> implode(', ')], 404);
+    }
+
     $tarea -> titulo = $request -> titulo;
     $tarea -> descripcion = $request -> descripcion;
     $tarea -> etiquetas() -> detach();
@@ -74,9 +88,9 @@ class TareaController extends Controller {
   public function destroy($id) {
     $tarea = Tarea::find($id);
     if (!$tarea) {
-      return response() -> json(["message" => "tarea no encontrada"], 404);
+      return response() -> json(['message' => 'tarea no encontrada'], 404);
     }
     $tarea -> delete();
-    return response() -> json(["message" => "tarea eliminada"], 204);
+    return response() -> json(['message' => 'tarea eliminada'], 204);
   }
 }

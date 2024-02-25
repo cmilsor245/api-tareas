@@ -36,7 +36,7 @@ class EtiquetaController extends Controller {
   public function show($id) {
     $tarea =  Etiqueta::find($id);
     if (!$tarea) {
-      return response() -> json(["message" => "etiqueta no encontrada"], 404);
+      return response() -> json(['message' => 'etiqueta no encontrada'], 404);
     }
     return new EtiquetaResource($tarea);
   }
@@ -54,7 +54,7 @@ class EtiquetaController extends Controller {
   public function update(EtiquetaRequest $request, $id): JsonResource {
     $etiqueta = Etiqueta::find($id);
     if (!$etiqueta) {
-      return response() -> json(["message" => "etiqueta no encontrada"], 404);
+      return response() -> json(['message' => 'etiqueta no encontrada'], 404);
     }
     $etiqueta -> update($request -> all());
     return new EtiquetaResource($etiqueta);
@@ -66,9 +66,9 @@ class EtiquetaController extends Controller {
   public function destroy($id) {
     $etiqueta = Etiqueta::find($id);
     if (!$etiqueta) {
-      return response() -> json(["message" => "etiqueta no encontrada"], 404);
+      return response() -> json(['message' => 'etiqueta no encontrada'], 404);
     }
     $etiqueta -> delete();
-    return response() -> json(["message" => "etiqueta eliminada"], 204);
+    return response() -> json(['message' => 'etiqueta eliminada'], 204);
   }
 }
