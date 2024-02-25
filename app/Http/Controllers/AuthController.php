@@ -22,4 +22,23 @@ class AuthController extends Controller {
       'token_type' => 'Bearer'
     ]);
   }
+
+  public function login(Request $request) {
+    $usuario = User::where('email', $request -> email) -> firstOrFail();
+
+    if (!$usuario || !Hash::check($request -> password, $usuario -> password)) {
+      return response() -> json([
+        'message' => 'credenciales incorrectas'
+      ], 401);
+
+      $token = $usuario -> createToken('authToken') -> plainTextToken;
+
+      return response() -> json([
+        'message' =>
+          'hola ' . $usuario -> name,
+          'access_token' => $token,
+          'token_type' => 'Bearer'
+      ]);
+    }
+  }
 }
