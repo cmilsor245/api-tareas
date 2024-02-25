@@ -37,8 +37,11 @@ class TareaController extends Controller {
   /**
    * display the specified resource
    */
-  public function show($id): JsonResource {
+  public function show($id) {
     $tarea = Tarea::find($id);
+    if (!$tarea) {
+      return response() -> json(["message" => "tarea no encontrada"], 404);
+    }
     return new TareaResource($tarea);
   }
 
@@ -54,6 +57,9 @@ class TareaController extends Controller {
    */
   public function update(TareaRequest $request, $id): JsonResource {
     $tarea = Tarea::find($id);
+    if (!$tarea) {
+      return response() -> json(["message" => "tarea no encontrada"], 404);
+    }
     $tarea -> titulo = $request -> titulo;
     $tarea -> descripcion = $request -> descripcion;
     $tarea -> etiquetas() -> detach();
@@ -67,11 +73,10 @@ class TareaController extends Controller {
    */
   public function destroy($id) {
     $tarea = Tarea::find($id);
-    if ($tarea) {
-      $tarea -> delete();
-      return response() -> json(["message" => "tarea eliminada"], 204);
-    } else {
+    if (!$tarea) {
       return response() -> json(["message" => "tarea no encontrada"], 404);
     }
+    $tarea -> delete();
+    return response() -> json(["message" => "tarea eliminada"], 204);
   }
 }
