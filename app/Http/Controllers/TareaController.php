@@ -27,10 +27,12 @@ class TareaController extends Controller {
    * store a newly created resource in storage
    */
   public function store(TareaRequest $request): JsonResource {
-    $etiquetas_existentes = Etiqueta::whereIn('id', $request -> etiquetas) -> pluck('id');
-    $etiquetas_inexistentes = collect($request -> etiquetas) -> diff($etiquetas_existentes -> all());
-    if ($etiquetas_inexistentes -> count() > 0) {
-      return new JsonResource(['message' => 'las siguientes etiquetas no existen: ' . $etiquetas_inexistentes -> implode(', ')], 404);
+    if ($request -> etiquetas) {
+      $etiquetas_existentes = Etiqueta::whereIn('id', $request -> etiquetas) -> pluck('id');
+      $etiquetas_inexistentes = collect($request -> etiquetas) -> diff($etiquetas_existentes -> all());
+      if ($etiquetas_inexistentes -> count() > 0) {
+        return new JsonResource(['message' => 'las siguientes etiquetas no existen: ' . $etiquetas_inexistentes -> implode(', ')], 404);
+      }
     }
 
     $tarea = new Tarea();
@@ -68,10 +70,12 @@ class TareaController extends Controller {
       return new JsonResource(['message' => 'tarea no encontrada'], 404);
     }
 
-    $etiquetas_existentes = Etiqueta::whereIn('id', $request -> etiquetas) -> pluck('id');
-    $etiquetas_inexistentes = collect($request -> etiquetas) -> diff($etiquetas_existentes -> all());
-    if ($etiquetas_inexistentes -> count() > 0) {
-      return new JsonResource(['message' => 'las siguientes etiquetas no existen: ' . $etiquetas_inexistentes -> implode(', ')], 404);
+    if ($request -> etiquetas) {
+      $etiquetas_existentes = Etiqueta::whereIn('id', $request -> etiquetas) -> pluck('id');
+      $etiquetas_inexistentes = collect($request -> etiquetas) -> diff($etiquetas_existentes -> all());
+      if ($etiquetas_inexistentes -> count() > 0) {
+        return new JsonResource(['message' => 'las siguientes etiquetas no existen: ' . $etiquetas_inexistentes -> implode(', ')], 404);
+      }
     }
 
     $tarea -> titulo = $request -> titulo;
