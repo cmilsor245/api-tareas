@@ -69,6 +69,6 @@ class EtiquetaController extends Controller {
       return response() -> json(['message' => 'etiqueta no encontrada'], 404);
     }
     $etiqueta -> delete();
-    return response() -> json(['message' => 'etiqueta eliminada'], 204);
+    return response() -> json(['message' => 'etiqueta eliminada'], 200);
   }
 }

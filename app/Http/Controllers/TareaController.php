@@ -91,6 +91,6 @@ class TareaController extends Controller {
       return response() -> json(['message' => 'tarea no encontrada'], 404);
     }
     $tarea -> delete();
-    return response() -> json(['message' => 'tarea eliminada'], 204);
+    return response() -> json(['message' => 'tarea eliminada'], 200);
   }
 }

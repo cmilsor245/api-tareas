@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
   /**
-   * run the migrations.
+   * run the migrations
    */
   public function up(): void {
     Schema::create('tarea_etiqueta', function (Blueprint $table) {
@@ -20,7 +20,7 @@ return new class extends Migration {
   }
 
   /**
-   * reverse the migrations.
+   * reverse the migrations
    */
   public function down(): void {
     Schema::dropIfExists('tarea_etiqueta');
