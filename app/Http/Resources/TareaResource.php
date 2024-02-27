@@ -10,13 +10,21 @@ class TareaResource extends JsonResource {
    *
    * @return array<string, mixed>
    */
-  public function toArray(Request $request): array {
-    return [
+  public function toArray($request): array {
+    $data = [
       'id' => $this -> id,
       'titulo' => $this -> titulo,
-      'descripcion' => $this -> descripcion,
-      'info-completa' => $this -> titulo . ' - ' . $this -> descripcion,
-      'etiquetas' => $this -> etiquetas -> pluck('nombre')
     ];
+
+    if ($request -> has('descripcion')) {
+      $data['descripcion'] = $this -> descripcion;
+      $data['info-completa'] = $this -> titulo . ' - ' . $this -> descripcion;
+    }
+
+    if ($request -> has('etiquetas')) {
+      $data['etiquetas'] = $this -> etiquetas -> pluck('nombre');
+    }
+
+    return $data;
   }
 }

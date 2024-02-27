@@ -27,20 +27,31 @@ class TareaController extends Controller {
    * store a newly created resource in storage
    */
   public function store(TareaRequest $request): JsonResource {
-    if ($request -> etiquetas) {
-      $etiquetas_existentes = Etiqueta::whereIn('id', $request -> etiquetas) -> pluck('id');
-      $etiquetas_inexistentes = collect($request -> etiquetas) -> diff($etiquetas_existentes -> all());
-      if ($etiquetas_inexistentes -> count() > 0) {
-        return new JsonResource(['message' => 'las siguientes etiquetas no existen: ' . $etiquetas_inexistentes -> implode(', ')], 404);
-      }
-    }
-
     $tarea = new Tarea();
     $tarea -> titulo = $request -> titulo;
     $tarea -> descripcion = $request -> descripcion;
     $tarea -> save();
-    $tarea -> etiquetas() -> attach($request -> etiquetas);
-    return new TareaResource($tarea);
+
+    if ($request -> has('etiquetas')) {
+      $etiquetas_existentes = $this -> obtenerEtiquetasExistentes($request -> etiquetas);
+
+      $tarea -> etiquetas() -> attach($etiquetas_existentes);
+
+      $response = [
+        'tarea' => new TareaResource($tarea),
+      ];
+
+      if (count($etiquetas_existentes) < count($request -> etiquetas)) {
+        $etiquetas_inexistentes = array_diff($request -> etiquetas, $etiquetas_existentes);
+        $response['message'] = 'algunas etiquetas no existen y no fueron agregadas: ' . implode(', ', $etiquetas_inexistentes);
+      }
+    } else {
+      $response = [
+        'tarea' => new TareaResource($tarea),
+      ];
+    }
+
+    return new JsonResource($response);
   }
 
   /**
@@ -67,23 +78,33 @@ class TareaController extends Controller {
   public function update(TareaRequest $request, $id): JsonResource {
     $tarea = Tarea::find($id);
     if (!$tarea) {
-      return new JsonResource(['message' => 'tarea no encontrada'], 404);
-    }
-
-    if ($request -> etiquetas) {
-      $etiquetas_existentes = Etiqueta::whereIn('id', $request -> etiquetas) -> pluck('id');
-      $etiquetas_inexistentes = collect($request -> etiquetas) -> diff($etiquetas_existentes -> all());
-      if ($etiquetas_inexistentes -> count() > 0) {
-        return new JsonResource(['message' => 'las siguientes etiquetas no existen: ' . $etiquetas_inexistentes -> implode(', ')], 404);
-      }
+        return new JsonResource(['message' => 'tarea no encontrada'], 404);
     }
 
     $tarea -> titulo = $request -> titulo;
     $tarea -> descripcion = $request -> descripcion;
     $tarea -> etiquetas() -> detach();
-    $tarea -> etiquetas() -> attach($request -> etiquetas);
-    $tarea -> save();
-    return new TareaResource($tarea);
+
+    if ($request -> has('etiquetas')) {
+      $etiquetas_existentes = $this -> obtenerEtiquetasExistentes($request -> etiquetas);
+
+      $tarea -> etiquetas() -> attach($etiquetas_existentes);
+
+      $response = [
+        'tarea' => new TareaResource($tarea),
+      ];
+
+      if (count($etiquetas_existentes) < count($request -> etiquetas)) {
+        $etiquetas_inexistentes = array_diff($request -> etiquetas, $etiquetas_existentes);
+        $response['message'] = 'algunas etiquetas no existen y no fueron agregadas: ' . implode(', ', $etiquetas_inexistentes);
+      }
+    } else {
+      $response = [
+        'tarea' => new TareaResource($tarea),
+      ];
+    }
+
+    return new JsonResource($response);
   }
 
   /**
@@ -96,5 +117,12 @@ class TareaController extends Controller {
     }
     $tarea -> delete();
     return response() -> json(['message' => 'tarea eliminada'], 200);
+  }
+
+  /**
+   * obtiene las etiquetas existentes en la base de datos dada una lista de ids
+   */
+  private function obtenerEtiquetasExistentes(array $etiquetas): array {
+    return Etiqueta::whereIn('id', $etiquetas) -> pluck('id') -> all();
   }
 }
