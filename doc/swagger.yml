@@ -1,0 +1,377 @@
+openapi: 3.0.0
+info:
+  title: api-tareas | christian millán soria
+  description: api rest para gestionar tareas y etiquetas
+  version: 1.0.0
+tags:
+  - name: tareas
+    description: operaciones relacionadas con las tareas
+  - name: etiquetas
+    description: operaciones relacionadas con las etiquetas
+  - name: usuarios
+    description: operaciones relacionadas con los usuarios
+paths:
+  /api/tareas:
+    get:
+      tags:
+        - tareas
+      summary: obtener todas las tareas
+      operationId: getTareas
+      responses:
+        '200':
+          description: lista de tareas recuperada exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tarea'
+    post:
+      tags:
+        - tareas
+      summary: crear una nueva tarea
+      operationId: crearTarea
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tareaInput'
+      responses:
+        '201':
+          description: tarea creada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tarea'
+  /api/tareas/{id}:
+    get:
+      tags:
+        - tareas
+      summary: obtener una tarea por su id
+      operationId: obtenerTareaPorID
+      parameters:
+        - name: id
+          in: path
+          description: id de la tarea a obtener
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: tarea recuperada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tarea'
+        '404':
+          description: tarea no encontrada
+    put:
+      tags:
+        - tareas
+      summary: actualizar una tarea existente
+      operationId: actualizarTarea
+      parameters:
+        - name: id
+          in: path
+          description: id de la tarea a actualizar
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tareaInput'
+      responses:
+        '200':
+          description: tarea actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tarea'
+        '404':
+          description: tarea no encontrada
+    delete:
+      tags:
+        - tareas
+      summary: eliminar una tarea por su id
+      operationId: eliminarTarea
+      parameters:
+        - name: id
+          in: path
+          description: id de la tarea a eliminar
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: tarea eliminada exitosamente
+        '404':
+          description: tarea no encontrada
+  /api/etiquetas:
+    get:
+      tags:
+        - etiquetas
+      summary: obtener todas las etiquetas
+      operationId: getEtiquetas
+      responses:
+        '200':
+          description: lista de etiquetas recuperada exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/etiqueta'
+    post:
+      tags:
+        - etiquetas
+      summary: crear una nueva etiqueta
+      operationId: crearEtiqueta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/etiquetaInput'
+      responses:
+        '201':
+          description: etiqueta creada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/etiqueta'
+  /api/etiquetas/{id}:
+    get:
+      tags:
+        - etiquetas
+      summary: obtener una etiqueta por su id
+      operationId: obtenerEtiquetaPorID
+      parameters:
+        - name: id
+          in: path
+          description: id de la etiqueta a obtener
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: etiqueta recuperada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/etiqueta'
+        '404':
+          description: etiqueta no encontrada
+    put:
+      tags:
+        - etiquetas
+      summary: actualizar una etiqueta existente
+      operationId: actualizarEtiqueta
+      parameters:
+        - name: id
+          in: path
+          description: id de la etiqueta a actualizar
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/etiquetaInput'
+      responses:
+        '200':
+          description: etiqueta actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/etiqueta'
+        '404':
+          description: etiqueta no encontrada
+    delete:
+      tags:
+        - etiquetas
+      summary: eliminar una etiqueta por su id
+      operationId: eliminarEtiqueta
+      parameters:
+        - name: id
+          in: path
+          description: id de la etiqueta a eliminar
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: etiqueta eliminada exitosamente
+        '404':
+          description: etiqueta no encontrada
+  /api/usuarios/registro:
+    post:
+      tags:
+        - usuarios
+      summary: registrar un nuevo usuario
+      operationId: signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/usuarioInput'
+      responses:
+        '200':
+          description: usuario registrado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/usuario'
+  /api/usuarios/login:
+    post:
+      tags:
+        - usuarios
+      summary: iniciar sesión de usuario
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginInput'
+      responses:
+        '200':
+          description: inicio de sesión exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: mensaje de bienvenida
+                  token_de_acceso:
+                    type: string
+                    description: token de acceso
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  token_type:
+                    type: string
+                    description: tipo de token
+                    example: "Bearer"
+        '401':
+          description: credenciales incorrectas
+  /api/usuarios/salir:
+    get:
+      tags:
+        - usuarios
+      summary: cerrar sesión de usuario
+      operationId: logout
+      responses:
+        '200':
+          description: sesión cerrada correctamente
+components:
+  schemas:
+    tarea:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        titulo:
+          type: string
+        descripcion:
+          type: string
+        etiquetas:
+          type: array
+          items:
+            $ref: '#/components/schemas/etiqueta'
+      example:
+        id: 1
+        titulo: "tarea 1"
+        descripcion: "descripción de la tarea 1"
+        etiquetas:
+          - id: 1
+            nombre: "etiqueta 1"
+          - id: 2
+            nombre: "etiqueta 2"
+    tareaInput:
+      type: object
+      properties:
+        titulo:
+          type: string
+        descripcion:
+          type: string
+        etiquetas:
+          type: array
+          items:
+            type: integer
+            format: int64
+      example:
+        titulo: "nueva tarea"
+        descripcion: "descripción de la nueva tarea"
+        etiquetas: [1, 2]
+    etiqueta:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nombre:
+          type: string
+      example:
+        id: 1
+        nombre: "etiqueta 1"
+    etiquetaInput:
+      type: object
+      properties:
+        nombre:
+          type: string
+      example:
+        nombre: "nueva etiqueta"
+    usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+      example:
+        id: 1
+        name: "testUser"
+        email: "test@test"
+    usuarioInput:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        name: "testUser"
+        email: "test@test"
+        password: "test"
+    loginInput:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: "test@test"
+        password: "test"
+servers:
+  - description: api-tareas
+    url: https://virtserver.swaggerhub.com/christianms13/api-tareas/1.0.0
