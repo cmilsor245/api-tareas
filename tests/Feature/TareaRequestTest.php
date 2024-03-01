@@ -16,6 +16,8 @@ class TareaRequestTest extends TestCase {
     $this -> actingAs(User::factory() -> create());
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_se_prohibe_crear_una_tarea_sin_titulo() {
     $tarea = Tarea::factory() -> make([
       'titulo' => null
@@ -25,6 +27,8 @@ class TareaRequestTest extends TestCase {
       'titulo' => $tarea -> titulo
     ]);
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_se_acepta_un_parametro_titulo_de_3_caracteres_como_minimo() {
     $tarea = Tarea::factory() -> create([
@@ -38,6 +42,8 @@ class TareaRequestTest extends TestCase {
     ]);
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_se_acepta_un_parametro_titulo_de_50_caracteres_como_maximo() {
     $tarea = Tarea::factory() -> create([
       'titulo' => str_repeat('a', 50),
@@ -50,6 +56,8 @@ class TareaRequestTest extends TestCase {
     ]);
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_se_prohibe_correctamente_un_titulo_de_menos_de_3_caracteres() {
     $tarea = Tarea::factory() -> make([
       'titulo' => '12',
@@ -60,6 +68,8 @@ class TareaRequestTest extends TestCase {
       'titulo' => $tarea -> titulo
     ]);
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_se_prohibe_correctamente_un_titulo_de_mas_de_50_caracteres() {
     $tarea = Tarea::factory() -> make([
@@ -72,6 +82,8 @@ class TareaRequestTest extends TestCase {
     ]);
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_se_puede_crear_una_tarea_con_una_descripcion_de_5_caracteres() {
     $tarea = Tarea::factory() -> create([
       'descripcion' => '12345'
@@ -82,6 +94,8 @@ class TareaRequestTest extends TestCase {
       'titulo' => $tarea -> titulo
     ]);
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_se_puede_crear_una_tarea_con_una_descripcion_de_255_caracteres() {
     $tarea = Tarea::factory() -> create([
@@ -94,6 +108,8 @@ class TareaRequestTest extends TestCase {
     ]);
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_se_prohibe_crear_una_tarea_con_una_descripcion_de_menos_de_5_caracteres() {
     $tarea = Tarea::factory() -> make([
       'descripcion' => '1234'
@@ -104,6 +120,8 @@ class TareaRequestTest extends TestCase {
       'titulo' => $tarea -> titulo
     ]);
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_se_prohibe_crear_una_tarea_con_una_descripcion_de_mas_de_255_caracteres() {
     $tarea = Tarea::factory() -> make([
@@ -116,6 +134,8 @@ class TareaRequestTest extends TestCase {
     ]);
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_es_posible_crear_una_tarea_sin_descripcion() {
     $tarea = Tarea::factory() -> create([
       'descripcion' => null
@@ -126,6 +146,8 @@ class TareaRequestTest extends TestCase {
       'titulo' => $tarea -> titulo
     ]);
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_es_posible_crear_una_tarea_sin_descripcion_pero_con_etiquetas() {
     $etiquetas = Etiqueta::factory() -> count(3) -> create();
@@ -146,6 +168,8 @@ class TareaRequestTest extends TestCase {
       ]);
     }
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_es_posible_crear_una_tarea_con_descripcion_pero_sin_etiquetas() {
     $tarea = Tarea::factory() -> create();

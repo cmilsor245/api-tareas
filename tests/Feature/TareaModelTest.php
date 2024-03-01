@@ -18,15 +18,6 @@ class TareaModelTest extends TestCase {
 
   /* ------------------------------------------------------------------------------------------------------- */
 
-  // ! no consigo que funcione correctamente
-  /* public function test_un_usuario_debe_estar_autenticado_para_crear_tareas() {
-    $this -> expectException(\Illuminate\Auth\Access\AuthorizationException::class);
-
-    Tarea::factory() -> create();
-  } */
-
-  /* ------------------------------------------------------------------------------------------------------- */
-
   public function test_crear_una_tarea() {
     $tarea = Tarea::factory() -> create();
 
@@ -35,6 +26,8 @@ class TareaModelTest extends TestCase {
       'descripcion' => $tarea -> descripcion
     ]);
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_crear_una_tarea_con_etiquetas() {
     $etiquetas = Etiqueta::factory() -> count(2) -> create();
@@ -55,6 +48,8 @@ class TareaModelTest extends TestCase {
     }
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_crear_una_tarea_solo_con_titulo() {
     $tarea = Tarea::factory() -> create([
       'descripcion' => null
@@ -66,6 +61,8 @@ class TareaModelTest extends TestCase {
     ]);
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_no_se_puede_crear_una_tarea_sin_titulo() {
     $this -> expectException(\Illuminate\Database\QueryException::class);
 
@@ -73,6 +70,8 @@ class TareaModelTest extends TestCase {
       'titulo' => null
     ]);
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_crear_una_tarea_con_etiquetas_y_sin_descripcion() {
     $etiquetas = Etiqueta::factory() -> count(2) -> create();
@@ -94,6 +93,8 @@ class TareaModelTest extends TestCase {
     }
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_no_se_pueden_asociar_etiquetas_inexistentes_a_una_tarea() {
     $this -> expectException(\Illuminate\Database\QueryException::class);
 
@@ -103,6 +104,8 @@ class TareaModelTest extends TestCase {
       1000
     ]);
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_se_asocian_las_etiquetas_validas_y_se_descartan_las_inexistentes() {
     $this -> expectException(\Illuminate\Database\QueryException::class);

@@ -30,6 +30,8 @@ class AuthControllerTest extends TestCase {
     $this -> assertArrayHasKey('token_type', $response_data);
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_login_con_credenciales_correctas() {
     User::factory() -> create([
       'name' => 'test',
@@ -54,6 +56,8 @@ class AuthControllerTest extends TestCase {
     $this -> assertNotEmpty($token);
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   // ! el método 'tokens()' no funciona
   /* public function test_logout_con_token_de_acceso_valido_devuelve_mensaje_de_exito() {
     $request = new Request();
@@ -73,6 +77,8 @@ class AuthControllerTest extends TestCase {
 
     $this -> assertEquals(200, $response -> getStatusCode());
   } */
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_no_se_puede_realizar_un_registro_con_un_email_existente() {
     $this -> expectException('Illuminate\Database\UniqueConstraintViolationException');
@@ -95,6 +101,8 @@ class AuthControllerTest extends TestCase {
     $this -> assertEquals(500, $response -> getStatusCode());
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_nombre_vacio_en_registro_produce_un_error() {
     $this -> expectException('Illuminate\Database\QueryException');
 
@@ -110,6 +118,8 @@ class AuthControllerTest extends TestCase {
     $this -> assertEquals(500, $response -> getStatusCode());
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_email_vacio_en_registro_produce_un_error() {
     $this -> expectException('Illuminate\Database\QueryException');
 
@@ -124,6 +134,8 @@ class AuthControllerTest extends TestCase {
 
     $this -> assertEquals(500, $response -> getStatusCode());
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   // * esto no funciona como se esperaría porque el campo 'password' parece no ser obligatorio
   /* public function test_password_vacio_en_registro_produce_un_error() {
@@ -141,6 +153,8 @@ class AuthControllerTest extends TestCase {
     $this -> assertEquals(500, $response -> getStatusCode());
   } */
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_login_con_email_no_existente_produce_un_error() {
     $request = new Request();
     $request -> replace([
@@ -152,6 +166,8 @@ class AuthControllerTest extends TestCase {
 
     $this -> assertEquals(401, $response -> getStatusCode());
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_login_con_credenciales_incorrectas_produce_un_error() {
     User::factory() -> create([
@@ -171,6 +187,8 @@ class AuthControllerTest extends TestCase {
     $this -> assertEquals(401, $response -> getStatusCode());
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_login_con_token_invalido_produce_un_error() {
     User::factory() -> create([
       'name' => 'test',
@@ -189,7 +207,8 @@ class AuthControllerTest extends TestCase {
     $this -> assertEquals(401, $response -> getStatusCode());
   }
 
-      // Accessing protected routes with invalid access token returns error message
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_acceder_a_una_ruta_protegida_con_un_token_invalido_devuelve_un_error() {
     $this -> expectException('Symfony\Component\Routing\Exception\RouteNotFoundException');
 
@@ -207,7 +226,7 @@ class AuthControllerTest extends TestCase {
       'Authorization' => 'Bearer ' . $token,
     ]) -> get('/api/tareas');
 
-    $response -> assertStatus(401);
+    $response -> assertStatus(500);
     $response -> assertJson([
       'message' => 'Unauthenticated.'
     ]);

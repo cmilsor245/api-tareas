@@ -18,6 +18,8 @@ class TareaResourceTest extends TestCase {
     $this -> actingAs(User::factory() -> create());
   }
 
+  /* ------------------------------------------------------------------------------------------------------- */
+
   public function test_recurso_tarea_incluye_id_y_titulo_por_defecto() {
     $tarea = Tarea::factory() -> create();
 
@@ -26,6 +28,8 @@ class TareaResourceTest extends TestCase {
     $this -> assertEquals($tarea -> id, $resource['id']);
     $this -> assertEquals($tarea -> titulo, $resource['titulo']);
   }
+
+  /* ------------------------------------------------------------------------------------------------------- */
 
   public function test_la_salida_de_una_tarea_utilizando_el_factory_general_incluye_titulo_descripcion() {
     $tarea = Tarea::factory() -> create();
