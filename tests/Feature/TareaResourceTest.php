@@ -6,9 +6,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Tarea;
-use App\Models\Etiqueta;
 use App\Http\Resources\TareaResource;
-use Illuminate\Http\Request;
 
 class TareaResourceTest extends TestCase {
   use RefreshDatabase;
