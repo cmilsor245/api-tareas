@@ -27,6 +27,9 @@ class TareaFactory extends Factory {
     return $this -> afterCreating(function (Tarea $tarea) {
       $etiquetas = Etiqueta::factory() -> count(rand(1, 3)) -> create();
       $tarea -> etiquetas() -> attach($etiquetas);
+
+      $info_completa = $tarea -> titulo . ' - ' . $tarea -> descripcion;
+      $tarea -> update(['info-completa' => $info_completa]);
     });
   }
 }
